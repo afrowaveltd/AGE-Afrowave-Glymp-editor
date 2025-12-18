@@ -1,17 +1,16 @@
 ﻿using AGE_Afrowave_Glyph_editor.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace AGE_Afrowave_Glyph_editor.ViewModels;
 
-public sealed class PixelCellViewModel(Glyph glyph, int x, int y) : INotifyPropertyChanged
+public sealed class PixelCellViewModel(Glyph glyph, int x, int y, Action? onChanged = null) : INotifyPropertyChanged
 {
    private readonly Glyph _glyph = glyph;
    private readonly int _x = x;
    private readonly int _y = y;
+   private readonly Action? _onChanged = onChanged;
 
    public bool IsOn
    {
@@ -20,6 +19,7 @@ public sealed class PixelCellViewModel(Glyph glyph, int x, int y) : INotifyPrope
       {
          _glyph.SetPixel(_x, _y, value);
          OnPropertyChanged();
+         _onChanged?.Invoke();
       }
    }
 
@@ -27,10 +27,10 @@ public sealed class PixelCellViewModel(Glyph glyph, int x, int y) : INotifyPrope
    {
       _glyph.TogglePixel(_x, _y);
       OnPropertyChanged(nameof(IsOn));
+      _onChanged?.Invoke();
    }
 
    public event PropertyChangedEventHandler? PropertyChanged;
-
    private void OnPropertyChanged([CallerMemberName] string? name = null)
        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

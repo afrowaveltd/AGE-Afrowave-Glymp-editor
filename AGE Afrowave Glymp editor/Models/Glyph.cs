@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AGE_Afrowave_Glyph_editor.Models;
 
@@ -14,8 +12,8 @@ public sealed class Glyph
 
    public Glyph(int width, int height)
    {
-      if(width <= 0) throw new ArgumentOutOfRangeException(nameof(width));
-      if(height <= 0) throw new ArgumentOutOfRangeException(nameof(height));
+      ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+      ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
       Width = width;
       Height = height;

@@ -1,8 +1,7 @@
 ﻿using AGE_Afrowave_Glyph_editor.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Linq;
 
 namespace AGE_Afrowave_Glyph_editor.ViewModels;
 
@@ -10,59 +9,39 @@ public sealed class MainViewModel
 {
    public Glyph Glyph { get; }
 
-   public ObservableCollection<PixelCellViewModel> Pixels { get; }
-
-   public int CellSize { get; } = 24;
-
-   public int EditorWidth => Width * CellSize;
-   public int EditorHeight => Height * CellSize;
-
    public int Width => Glyph.Width;
    public int Height => Glyph.Height;
 
-   public int SelectedRow { get; private set; } = -1;
+   public int CellSize { get; } = 22;
+   public int EditorWidth => Width * CellSize;
+
+   public ObservableCollection<RowViewModel> Rows { get; }
+
+   public List<string> ColumnLabels { get; }
 
    public MainViewModel()
    {
-      // zatím natvrdo, později presety
+
       Glyph = new Glyph(8, 16);
-      Pixels = new ObservableCollection<PixelCellViewModel>();
 
-      BuildPixelGrid();
-   }
+      ColumnLabels = Enumerable.Range(0, Glyph.Width)
+          .Select(i => i < 10 ? i.ToString() : ((char)('A' + (i - 10))).ToString())
+          .ToList();
 
-   private void BuildPixelGrid()
-   {
-      Pixels.Clear();
-
+      Rows = new ObservableCollection<RowViewModel>();
       for(int y = 0; y < Glyph.Height; y++)
-      {
-         for(int x = 0; x < Glyph.Width; x++)
-         {
-            Pixels.Add(new PixelCellViewModel(Glyph, x, y));
-         }
-      }
+         Rows.Add(new RowViewModel(Glyph, y));
    }
 
-   // klávesy – zatím jen příprava
-   public void SelectRow(int row)
+   private void ToggleTheme()
    {
-      if(row < 0 || row >= Height)
-         return;
+      var app = Avalonia.Application.Current;
+      if(app is null) return;
 
-      SelectedRow = row;
-      // později vizuální zvýraznění
+      app.RequestedThemeVariant =
+          app.RequestedThemeVariant == Avalonia.Styling.ThemeVariant.Dark
+              ? Avalonia.Styling.ThemeVariant.Light
+              : Avalonia.Styling.ThemeVariant.Dark;
    }
 
-   public void ToggleAt(int column)
-   {
-      if(SelectedRow < 0) return;
-      if(column < 0 || column >= Width) return;
-
-      Glyph.TogglePixel(column, SelectedRow);
-
-      // informujeme konkrétní pixel
-      int index = (SelectedRow * Width) + column;
-      Pixels[index].Toggle();
-   }
 }
