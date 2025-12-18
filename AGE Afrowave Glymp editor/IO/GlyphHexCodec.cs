@@ -1,11 +1,11 @@
-﻿using AGE_Afrowave_Glymp_editor.Models;
+﻿using AGE_Afrowave_Glyph_editor.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace AGE_Afrowave_Glymp_editor.IO;
+namespace AGE_Afrowave_Glyph_editor.IO;
 
 public static class GlyphHexCodec
 {

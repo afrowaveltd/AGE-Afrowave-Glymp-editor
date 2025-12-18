@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AGE_Afrowave_Glymp_editor.Models;
+namespace AGE_Afrowave_Glyph_editor.Models;
 
 public sealed class Glyph
 {

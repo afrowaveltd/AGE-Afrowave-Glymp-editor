@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:AGE_Afrowave_Glyph_editor.ViewModels"
+        xmlns:conv="using:AGE_Afrowave_Glyph_editor.Converters"
+        x:DataType="vm:MainViewModel"
+    
+        Width="800"
+        Height="600"
+        x:Class="AGE_Afrowave_Glyph_editor.MainView"
+        Title="AGE – Afrowave Glyph Editor">
+<Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <DockPanel Margin="10">
+
+        <!-- Spodek: preview (zatím placeholder) -->
+        <Border DockPanel.Dock="Bottom"
+                Height="120"
+                Background="#222"
+                Margin="0,10,0,0"/>
+
+        <!-- Editor -->
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+              VerticalScrollBarVisibility="Auto">
+    <ItemsControl ItemsSource="{Binding Pixels}"
+                  Width="{Binding EditorWidth}"
+                  HorizontalAlignment="Left">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding Width}"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:PixelCellViewModel">
+                <Border Width="24"
+                        Height="24"
+                        Margin="0"
+                        BorderBrush="#555"
+                        BorderThickness="1"
+                        Background="{Binding IsOn, Converter={x:Static conv:BoolToBrushConverter.Instance}}"
+                        PointerPressed="Pixel_PointerPressed"/>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</ScrollViewer>
+
+    </DockPanel>
+</Window>
